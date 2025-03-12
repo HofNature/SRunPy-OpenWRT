@@ -1,0 +1,4 @@
+#!/bin/sh
+# pre-install script
+
+exit 0

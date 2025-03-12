@@ -1,0 +1,4 @@
+#!/bin/sh
+# post-install script
+
+exit 0
