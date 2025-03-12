@@ -1,0 +1,4 @@
+#!/bin/sh
+# pre-remove script
+
+exit 0

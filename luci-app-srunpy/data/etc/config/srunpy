@@ -1,0 +1,10 @@
+config srunpy
+    option enable '0'
+    option host 'gw.buaa.edu.cn'
+    option protcol 'https'
+    option sleeptime '5'
+    option ssl_verify '1'
+
+config account 
+    option username ''
+    option password ''

@@ -1,0 +1,7 @@
+#!/bin/sh
+# post-install script
+
+service srunpy enable > /dev/null 2>&1
+service srunpy start > /dev/null 2>&1
+
+exit 0
