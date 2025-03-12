@@ -1,5 +1,8 @@
 # 校园网自动登陆器（深澜网关专用）OpenWRT 版
 
+这是适用于OpenWRT的版本，本工具还提供[适用于Windows和普通Linux的版本](https://github.com/HofNature/SRunPy-GUI)。
+
+
 ### 支持的功能
 
 1. 记住账号和密码
