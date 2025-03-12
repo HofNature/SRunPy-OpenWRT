@@ -10,18 +10,16 @@ enable = s:option(Flag, "enable", translate("启用"))
 running = s:option(DummyValue, "_running", translate("运行状态"))
 running.rawhtml = true
 function running.cfgvalue(self, section)
-    local pid = luci.sys.exec("cat /var/run/srunpy.pid 2>/dev/null")
-    if pid and pid ~= "" then
-        local running = luci.sys.exec("ps -p " .. pid .. " | grep " .. pid)
-        if running and running ~= "" then
-            return "<span style='color:green'>" .. translate("正在运行") .. "</span>"
-        end
+    local status = luci.sys.exec("service srunpy status")
+    if status:match("running") then
+        return "<span style='color:green'>" .. translate("正在运行") .. "</span>"
     end
     return "<span style='color:red'>" .. translate("未在运行") .. "</span>"
 end
 host = s:option(Value, "host", translate("服务地址"))
 prot = s:option(ListValue, "protcol", translate("服务协议"))
-prot:value("https", "http")
+prot:value("http", "HTTP")
+prot:value("https", "HTTPS")
 sleeptime = s:option(Value, "sleeptime", translate("检测间隔"))
 sleeptime.datatype = "uinteger"
 verify = s:option(Flag, "ssl_verify", translate("验证SSL"))
@@ -38,7 +36,9 @@ pass.rmempty = false
 
 local apply = luci.http.formvalue("cbi.apply")
 if apply then
-    io.popen("/etc/init.d/srunpy stop > /dev/null && /etc/init.d/srunpy start > /dev/null &")
+    m.uci:save("srunpy")
+    m.uci:commit("srunpy")
+    luci.sys.call("sleep 1 && /etc/init.d/srunpy stop > /dev/null && /etc/init.d/srunpy start > /dev/null &")
 end
 
 return m

@@ -10,6 +10,9 @@ start_service() {
         local protcol=$(uci get srunpy.@srunpy[0].protcol)
         local sleeptime=$(uci get srunpy.@srunpy[0].sleeptime)
         local ssl_verify=$(uci get srunpy.@srunpy[0].ssl_verify)
+        if [ "$ssl_verify" != "1" ]; then
+            ssl_verify="0"
+        fi
         local username=$(uci get srunpy.@account[0].username)
         local password=$(uci get srunpy.@account[0].password)
         procd_open_instance
