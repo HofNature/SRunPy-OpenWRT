@@ -7,7 +7,7 @@ License: GPL-2.0
 Section: Applications
 Priority: optional
 Maintainer: Shian Waito
-SourceDateEpoch: 1676101875
+SourceDateEpoch: 1741783227
 Architecture: all
-Installed-Size: 2478
+Installed-Size: 12257
 Description: An automatic login script for SRun Gateway
