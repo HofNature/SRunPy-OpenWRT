@@ -2,6 +2,7 @@ import os
 import time
 import argparse
 import sys
+from subprocess import Popen
 
 sys.path.append(os.path.join(os.path.dirname(__file__)))
 from SRunLite import SrunClient
@@ -43,6 +44,9 @@ def main(host,protcol,username,password,sleeptime,ssl_verify):
     def logger(msg):
         time_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         print(f'[Srun AutoLogin {time_str}] {msg}')
+        Popen(['logger', '-t', 'srun-autologin', msg])
+
+    logger('Hello from Srun AutoLogin!')
 
     while True:
         try:
