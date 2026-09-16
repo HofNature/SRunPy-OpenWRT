@@ -63,7 +63,8 @@
 
 ### 致谢
 
-该程序基于 [iskoldt/srunauthenticator](https://github.com/iskoldt-X/SRUN-authenticator) 的后端开发。
+该程序基于 [iskoldt/srunauthenticator](https://github.com/iskoldt-X/SRUN-authenticator) 的后端开发。  
+感谢 @zhang-astronaut 贡献的基于[rychly/openwrt-ipk2apk](https://github.com/rychly/openwrt-ipk2apk)的打包脚本。
 
 # SRunPy for OpenWRT
 
@@ -127,4 +128,5 @@ You can also operate the script directly from the command line. Here are some co
 
 ### Acknowledgements
 
-This program is based on [iskoldt/srunauthenticator](https://github.com/iskoldt-X/SRUN-authenticator) for the backend.
+This program is based on [iskoldt/srunauthenticator](https://github.com/iskoldt-X/SRUN-authenticator) for the backend.  
+Thanks to @zhang-astronaut for contributing the packaging script based on [rychly/openwrt-ipk2apk](https://github.com/rychly/openwrt-ipk2apk).

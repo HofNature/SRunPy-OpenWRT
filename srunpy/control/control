@@ -1,5 +1,5 @@
 Package: srunpy
-Version: 1.0.0
+Version: 1.0.1
 Depends: python3-requests
 Source: packages/srunpy
 SourceName: srunpy
