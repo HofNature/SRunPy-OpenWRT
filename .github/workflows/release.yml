@@ -1,0 +1,64 @@
+name: 构建 ipk 与 apk 软件包
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 打包 ipk 并转换为 apk
+        run: |
+          set -e
+          mkdir -p dist
+
+          # 仓库中部分文件是 CRLF 换行，CRLF 会导致 OpenWrt 上的 shell 脚本无法执行，统一转成 LF
+          find srunpy luci-app-srunpy -type f -print0 | xargs -0 -r sed -i 's/\r$//'
+
+          for pkg in srunpy luci-app-srunpy; do
+            name=$(sed -n 's/^Package: //p' "$pkg/control/control")
+            ver=$(sed -n 's/^Version: //p' "$pkg/control/control")
+            work=$(mktemp -d)
+
+            mkdir -p "$work/control"
+            cp "$pkg/control/control" "$work/control/"
+            for s in preinst postinst prerm postrm; do
+              [ -f "$pkg/control/$s" ] && cp "$pkg/control/$s" "$work/control/" || true
+            done
+
+            tar czf "$work/control.tar.gz" -C "$work/control" .
+            tar czf "$work/data.tar.gz"    -C "$pkg/data" .
+            echo "2.0" > "$work/debian-binary"
+
+            ipk="dist/${name}-${ver}.ipk"
+            tar czf "$ipk" -C "$work" debian-binary control.tar.gz data.tar.gz
+
+            # ipk2apk.py 是纯 Python 3 脚本，无需安装任何依赖。
+            # 产出 APKv2，apk-tools 3（OpenWrt 25.12 起）向下兼容，可直接 apk add 安装。
+            python3 tools/ipk2apk.py "$ipk" -o "dist/${name}-${ver}-r1.apk"
+
+            rm -rf "$work"
+          done
+
+          ls -l dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: dist/*
+
+      - name: 上传到 Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          tag="${GITHUB_REF_NAME}"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --generate-notes
+          gh release upload "$tag" dist/* --clobber
